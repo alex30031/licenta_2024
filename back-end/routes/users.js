@@ -7,9 +7,10 @@ export const router = express.Router();
 
 
 router.post('/login', userController.login);
+router.get('/login', userController.login);
 router.post('/signup', userController.createUser);
-router.get('/', userController.getUsers);
-router.get('/:userId', userController.getUserById);
+router.get('/users', userController.getUsers);
+router.get('/id::userId', userController.getUserById);
 
 
 

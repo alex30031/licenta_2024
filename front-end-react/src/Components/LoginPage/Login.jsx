@@ -10,55 +10,66 @@ import password_icon from "../Assets/password.png"
 const SERVER_URL = 'http://localhost:3000';
 
 
-const Login = () => {
+const Login = ({onLogin, onSignup}) => {
         const [name, setName] = useState("");
         const [email, setEmail] = useState("");
         const [password, setPassword] = useState("");
-        const addUser = async (name, email, password) => {
-                try {
-                    const user = {
-                        name: name,
-                        email: email,
-                        password: password,
-                        accountType: "user"
-                    };
-            
-                    const response = await axios.post(`${SERVER_URL}/users/signup`, user);
-                    console.log(response.data);
-                } catch (error) {
-                    console.error('Eroare la înregistrare:', error.response ? error.response.data : error.message);
-                }
-            };
-            
-        console.log("LoginSignup component rendered");
+        // const addUser = async (name, email, password) => {
+        //         try {
+        //             const response = await axios.post(`${SERVER_URL}/signup`, 
+        //             {
+        //                 username: name,
+        //                 email: email,
+        //                 password: password,
+        //                 accountType: "user",
+        //             });
+                    
+        //         } catch (error) {
+        //             console.error('Eroare la înregistrare:', error.response ? error.response.data : error.message);
+        //         }
+        //     };
 
         const navigate = useNavigate();
 
-        const handleSignUpClick = () => {
+        const handleSignUpClick = async () => {
                 if (action === "Login") {
-                    setAction("Sign Up");
+                  setAction("Sign Up");
                 } else {
-                        if (!email.endsWith('@stud.ase.ro')) {
-                                alert('Eroare la înregistrare: Adresa de email trebuie să fie de tipul stud.ase.ro');
-                                return;}
-                              else{
-                        addUser(name, email, password);
-                    navigate("/home");}
+                  if (!email.endsWith('@stud.ase.ro')) {
+                    alert('Eroare la înregistrare: Adresa de email trebuie să fie de tipul stud.ase.ro');
+                    return;
+                  } else {
+                    try {
+                      const response = await axios.post(`${SERVER_URL}/signup`, {
+                        username: name,
+                        email: email,
+                        password: password,
+                        accountType: "user",
+                      });
+                      const userData = response.data; // Assuming the response contains user data
+                      onSignup(userData); // Update the userData state after successful signup
+                      navigate("/home");
+                    } catch (error) {
+                      console.error('Eroare la înregistrare:', error.response ? error.response.data : error.message);
+                    }
+                  }
                 }
-        }
+              };
+              
 
         const handleLoginClick = async () => {
                 if (action === "Sign Up") {
                   setAction("Login");
                 } else {
                   try {
-                    const response = await axios.post(`${SERVER_URL}/users/login`, {
+                    const response = await axios.post(`${SERVER_URL}/login`, {
                       email: email,
                       password: password,
                     });
-              
-                    const user = response.data;
-                    
+                    const userData = response.data;
+
+                   
+                    onLogin(userData);
                     
                       navigate("/home");
                     }

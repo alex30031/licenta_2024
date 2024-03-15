@@ -1,0 +1,41 @@
+.username{
+  color:white;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: black;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 60px;
+    list-style-type: none;
+  }
+  
+  .logo-container {
+    text-decoration: none; 
+  }
+  
+  .options {
+    display: flex;
+    align-items: center;
+    margin: 20px;
+    padding: 0;;
+  }
+  
+  .options li {
+    margin-left: 70px; 
+
+  }
+  
+  .optionsItems {
+    color: white;
+    text-decoration: none; 
+  }
+  
+  .logo {
+    margin-left: 20px;
+    width: 100px;
+    height: auto;
+  }
+  

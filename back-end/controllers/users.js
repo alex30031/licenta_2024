@@ -1,33 +1,36 @@
 import { Op } from "sequelize";
 import { User } from "../models/users.js";
 
-
-const getUserByEmail = async (req,res) => {
-    const email = req.params.email;
-    const user = await User.findOne({ where: { email: email } });
-    if (user) {
-        res.status(200).send(user);
-    } else {
-        res.status(404).send({ message: `Nu am găsit niciun utilizator cu adresa de email ${email}.` });
-    }
-}
-
 const login = async (req, res) => {
-  console.log("am ajuns aici")
+  console.log("am ajuns aici");
   const { email, password } = req.body;
 
   try {
-  
     const user = await User.findOne({ where: { email } });
 
     if (user && user.password === password) {
-      res.status(200).json({ message: 'Autentificare reușită!' });
+      res.status(200).json({ message: 'Autentificare reușită!', user}); // Send user ID in the response
     } else {
       res.status(401).json({ message: 'Adresa de email sau parola incorectă.' });
     }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'A apărut o eroare la autentificare.' });
+  }
+};
+const createUser = async (req, res) => {
+  const { username, email, password, accountType } = req.body;
+  try {
+    const user = await User.create({
+      username,
+      email,
+      password,
+      accountType
+    });
+    res.status(200).json({user});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'A apărut o eroare la înregistrare.' });
   }
 };
 
@@ -39,31 +42,16 @@ const getUsers = async (req, res) => {
 }
 
 const getUserById = async (req, res) => {
-    const userId = req.params.userId;
-    const user = await User.findOne({ where: { userId: userId } });
-    if (user) {
-        res.status(200).send(user);
-    } else {
-        res.status(404).send({ message: `Nu am găsit niciun utilizator cu id-ul ${userId}.` });
-    }
+  const userId = req.params.userId;
+  const user = await User.findOne({ where: { userId: userId } }); 
+  if (user) {
+      res.status(200).send(user);
+  } else {
+      res.status(404).send({ message: `Nu am găsit niciun utilizator cu id-ul ${userId}.` });
+  }
 }
-const createUser = async (req, res) => {
-    const { name, email, password, accountType } = req.body;
-  
-    try {
-      const newUser = await User.create({
-        username: name,
-        email,
-        password,
-        accountType
-      });
-  
-      res.status(201).json(newUser);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'A apărut o eroare la înregistrare.' });
-    }
-  };
+
+
 
 
   const updateUser = async (req, res) => {
@@ -91,18 +79,30 @@ const deleteUser = async (req, res) => {
     } else {
         res.status(404).send({ message: `Nu am găsit niciun utilizator cu id-ul ${userId}.` });
     }
-}
+  }
 
+  const logout = async (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'A apărut o eroare la delogare.' });
+    } else {
+      res.clearCookie('connect.sid');
+      res.status(200).json({ message: 'Delogare reușită!' });
+    }
+  });
+  res.status(200).json({ message: 'Logout successful' });
+  }
 
 
 export{
     login,
     getUsers,
-    getUserByEmail,
     getUserById,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    logout
 }
 
 
