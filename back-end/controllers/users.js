@@ -1,15 +1,19 @@
 import { Op } from "sequelize";
 import { User } from "../models/users.js";
 
+import jwt from 'jsonwebtoken';
+
+const jwt_secret = 'ddjash2bj12b312nbbd3i2b983d2hdksahd91ks';
+
 const login = async (req, res) => {
   console.log("am ajuns aici");
   const { email, password } = req.body;
 
   try {
     const user = await User.findOne({ where: { email } });
-
     if (user && user.password === password) {
-      res.status(200).json({ message: 'Autentificare reușită!', user}); // Send user ID in the response
+      const token = jwt.sign({ userId: user.userId, email: user.email, username: user.username, accountType: user.accountType }, jwt_secret);
+      res.status(200).json({ message: 'Autentificare reușită!', token}); 
     } else {
       res.status(401).json({ message: 'Adresa de email sau parola incorectă.' });
     }
@@ -27,7 +31,8 @@ const createUser = async (req, res) => {
       password,
       accountType
     });
-    res.status(200).json({user});
+    const token = jwt.sign({ userId: user.userId, email: user.email, username: user.username, accountType: user.accountType }, jwt_secret);
+    res.status(200).json({token});
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'A apărut o eroare la înregistrare.' });

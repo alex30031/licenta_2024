@@ -14,6 +14,7 @@ const Login = ({onLogin, onSignup}) => {
         const [name, setName] = useState("");
         const [email, setEmail] = useState("");
         const [password, setPassword] = useState("");
+        
         // const addUser = async (name, email, password) => {
         //         try {
         //             const response = await axios.post(`${SERVER_URL}/signup`, 
@@ -46,11 +47,15 @@ const Login = ({onLogin, onSignup}) => {
                         password: password,
                         accountType: "user",
                       });
-                      const userData = response.data; // Assuming the response contains user data
-                      onSignup(userData); // Update the userData state after successful signup
+                      const {token} = response.data;
+
+                      localStorage.setItem('token', token);
+                      onSignup(token); 
+                     
+
                       navigate("/home");
                     } catch (error) {
-                      console.error('Eroare la înregistrare:', error.response ? error.response.data : error.message);
+                      console.error('Eroare la înregistrare');
                     }
                   }
                 }
@@ -66,12 +71,12 @@ const Login = ({onLogin, onSignup}) => {
                       email: email,
                       password: password,
                     });
-                    const userData = response.data;
+                    const {token} = response.data;
 
-                   
-                    onLogin(userData);
+                    localStorage.setItem('token', token);
+                    onLogin(token);
                     
-                      navigate("/home");
+                    navigate("/home");
                     }
                    catch (error) {
                     alert('Eroare la autentificare: Adresa de email nu există sau alte probleme');

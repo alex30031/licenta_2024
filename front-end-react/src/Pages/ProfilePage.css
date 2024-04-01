@@ -1,0 +1,85 @@
+.profile-form{
+    margin: auto;
+    background-color: white;
+    width: fit-content;
+    height: auto;
+    border-radius: 5px;
+    list-style-type: none;
+    padding: 10px;
+    text-align: center;
+    margin-top: 50px;
+    
+}
+.profile-form li{
+    font-weight: bold;
+    border-radius: 5px;
+    margin: 3px;
+}
+.sidebar ul{
+    margin: auto;
+    background-color: white;
+    width: fix-content;
+    height: auto;
+    border-radius: 5px;
+    list-style-type: none;
+    padding: 10px;
+    text-align: center;
+    margin-top: 60px;
+    margin-left: 20px;
+    top: 50px;
+    position: absolute;
+
+}
+.sidebar li:hover{
+    cursor: pointer;
+    background-color: gainsboro;
+    border-radius: 5px;
+    padding: 10px;
+}
+.sidebar li{
+    padding: 10px;
+    border-radius: 5px;
+    
+}
+.profile-info{
+    flex : 1;
+}
+.restday-form{
+    margin: auto;
+    background-color: white;
+    width: fit-content;
+    height: auto;
+    border-radius: 5px;
+    list-style-type: none;
+    padding: 10px;
+    text-align: center;
+    margin-top: 50px;
+    display:grid;
+}
+.submit-rest{
+    margin: auto;
+    width: fit-content;
+    height: auto;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.restday-form li{
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.productivity-graph{
+    margin: auto;
+    background-color: white;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 5px;
+    list-style-type: none;
+    padding: 10px;
+    text-align: center;
+    margin-top: 50px;
+}

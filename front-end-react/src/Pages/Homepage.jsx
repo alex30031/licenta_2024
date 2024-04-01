@@ -1,13 +1,11 @@
-// Homepage.js
 import React from 'react';
 import Navbar from '../Components/Navbar/Navbar';
 
-const Homepage = ({ userData }) => {
-  
+const Homepage = ({ decodedToken }) => {
   return (
     <div>
-      {userData && <Navbar userData={userData}/>}
-
+      {decodedToken && <Navbar decodedToken={decodedToken}/>}
+      <h1>Welcome to the homepage, {decodedToken.username}!</h1>
     </div>
   );
 };

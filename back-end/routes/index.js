@@ -3,13 +3,3 @@ import {router as usersRouter} from './users.js';
 
 export const router = express.Router();
 router.use('/', usersRouter);
-
-// ReactDOM.render(
-//   <Router>
-//     <Switch>
-//       <Route path="/home" element={<HomePage />} />
-//       <Route path="/login" element={<LoginSignup />} />
-//     </Switch>
-//   </Router>,
-//   document.getElementById("root")
-// );
