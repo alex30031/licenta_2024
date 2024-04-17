@@ -83,3 +83,31 @@
     text-align: center;
     margin-top: 50px;
 }
+.restday-requests{
+    margin: auto;
+    background-color: white;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 5px;
+    list-style-type: none;
+    padding: 10px;
+    text-align: center;
+    margin-top: 50px;
+}
+.restday-list{
+    margin: auto;
+    background-color: white;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 5px;
+    list-style-type: none;
+    padding: 10px;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.restday-list li{
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px;
+}

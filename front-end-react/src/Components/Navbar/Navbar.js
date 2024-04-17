@@ -5,26 +5,33 @@ import { IoLogOutOutline } from "react-icons/io5";
 import './Navbar.css'
 import logo from '../Assets/logo.png'
 
-const routes = [
-  {
-    title: "Home",
-    href: "/home",
-    onclick: "window.location.reload(false)",
-    Icon: BiHomeAlt2,
-  },
-  {
-    title: "Profile",
-    href: "/profile",
-    Icon: CgProfile,
-  },
-  {
-    title: "Logout",
-    href: "/",
-    Icon: IoLogOutOutline,
-  },
-]
 
 const Navbar = ({ decodedToken }) => {
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('userTokens');
+  };
+
+  const routes = [
+    {
+      title: "Home",
+      href: "/home",
+      onclick: ()=> window.location.reload(false),
+      Icon: BiHomeAlt2,
+    },
+    {
+      title: "Profile",
+      href: "/profile",
+      Icon: CgProfile,
+    },
+    {
+      title: "Logout",
+      href: "/",
+      Icon: IoLogOutOutline,
+      onclick: handleLogout,
+    },
+  ];
+  
   return (
     <nav className="navbar">
       <a href="/home" className="logo-container">
@@ -34,19 +41,26 @@ const Navbar = ({ decodedToken }) => {
       <ul className="options">
         <p className="username"> Logged in as {decodedToken.username}</p>
         {routes.map((route) => {
-          const { Icon, href, title } = route;
-          return (
-            <li key={title}>
+        const { Icon, href, title, onclick } = route;
+        return (
+          <li key={title}>
+            {onclick ? (
+              <a href={href} onClick={onclick} className="optionsItems">
+                <Icon />
+                {title}
+              </a>
+            ) : (
               <a href={href} className="optionsItems">
                 <Icon />
                 {title}
               </a>
-            </li>
-          );
-        })}
+            )}
+          </li>
+        );
+      })}
       </ul>
     </nav>
   );
 }
 
-export default Navbar
+export default Navbar;

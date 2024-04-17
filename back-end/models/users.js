@@ -1,7 +1,9 @@
-import {database} from './config.js';
+// users.js
+import {database, syncDatabase} from './config.js';
 import { DataTypes } from 'sequelize';
+import { RestDayForm } from './restday.js';
 
-export const User = database.define('login', {
+export const User = database.define('logins', {
     userId:{
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -34,3 +36,8 @@ export const User = database.define('login', {
             }
         ]
     });
+
+User.hasMany(RestDayForm, {foreignKey: 'loginUserId', foreignKeyConstraint: true});
+RestDayForm.belongsTo(User);
+
+await syncDatabase();

@@ -12,7 +12,7 @@ const login = async (req, res) => {
   try {
     const user = await User.findOne({ where: { email } });
     if (user && user.password === password) {
-      const token = jwt.sign({ userId: user.userId, email: user.email, username: user.username, accountType: user.accountType }, jwt_secret);
+      const token = jwt.sign({ userId: user.userId, email: user.email, username: user.username, accountType: user.accountType }, jwt_secret , { expiresIn: '1h' });
       res.status(200).json({ message: 'Autentificare reușită!', token}); 
     } else {
       res.status(401).json({ message: 'Adresa de email sau parola incorectă.' });
@@ -22,6 +22,7 @@ const login = async (req, res) => {
     res.status(500).json({ message: 'A apărut o eroare la autentificare.' });
   }
 };
+
 const createUser = async (req, res) => {
   const { username, email, password, accountType } = req.body;
   try {
@@ -31,7 +32,7 @@ const createUser = async (req, res) => {
       password,
       accountType
     });
-    const token = jwt.sign({ userId: user.userId, email: user.email, username: user.username, accountType: user.accountType }, jwt_secret);
+    const token = jwt.sign({ userId: user.userId, email: user.email, username: user.username, accountType: user.accountType }, jwt_secret, { expiresIn: '1h' });
     res.status(200).json({token});
   } catch (error) {
     console.error(error);

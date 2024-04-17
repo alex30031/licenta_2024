@@ -1,12 +1,15 @@
 import express from 'express'
 import cors from 'cors'
 import {router as indexRouter} from './routes/index.js'
-
 import { syncDatabase } from './models/config.js'
+
+
 
 
 const app = express()
 const PORT = 3000
+
+
 
 app.use(express.json());
 

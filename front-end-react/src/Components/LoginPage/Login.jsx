@@ -14,22 +14,6 @@ const Login = ({onLogin, onSignup}) => {
         const [name, setName] = useState("");
         const [email, setEmail] = useState("");
         const [password, setPassword] = useState("");
-        
-        // const addUser = async (name, email, password) => {
-        //         try {
-        //             const response = await axios.post(`${SERVER_URL}/signup`, 
-        //             {
-        //                 username: name,
-        //                 email: email,
-        //                 password: password,
-        //                 accountType: "user",
-        //             });
-                    
-        //         } catch (error) {
-        //             console.error('Eroare la înregistrare:', error.response ? error.response.data : error.message);
-        //         }
-        //     };
-
         const navigate = useNavigate();
 
         const handleSignUpClick = async () => {
@@ -49,9 +33,12 @@ const Login = ({onLogin, onSignup}) => {
                       });
                       const {token} = response.data;
 
-                      localStorage.setItem('token', token);
+                      const userTokens = JSON.parse(sessionStorage.getItem('userTokens')) || {};
+                      userTokens[response.data.userId] = token;
+                      sessionStorage.setItem('userTokens', JSON.stringify(userTokens));
+
                       onSignup(token); 
-                     
+                  
 
                       navigate("/home");
                     } catch (error) {
@@ -73,8 +60,13 @@ const Login = ({onLogin, onSignup}) => {
                     });
                     const {token} = response.data;
 
-                    localStorage.setItem('token', token);
+                    const userTokens = JSON.parse(sessionStorage.getItem('userTokens')) || {};
+                    userTokens[response.data.userId] = token;
+                    sessionStorage.setItem('userTokens', JSON.stringify(userTokens));
+                    
                     onLogin(token);
+
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                     
                     navigate("/home");
                     }
@@ -86,7 +78,7 @@ const Login = ({onLogin, onSignup}) => {
               
           
           
-        const [action,setAction] = useState("Login");
+    const [action,setAction] = useState("Login");
 
     return (
         <form>
