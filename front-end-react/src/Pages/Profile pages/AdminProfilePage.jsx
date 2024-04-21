@@ -8,12 +8,20 @@ const SERVER_URL = 'http://localhost:3000';
 
 const RestdayRequests = () => {
   const [requests, setRequests] = useState([]);
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
       const fetchRequests = async () => {
           try {
               const response = await axios.get(`${SERVER_URL}/restday`);
               setRequests(response.data);
+
+              const usernamesMap = {};
+              for(const request of response.data){
+                const usernameResponse = await axios.get(`${SERVER_URL}/id:${request.loginUserId}`);
+                usernamesMap[request.loginUserId] = usernameResponse.data.username;
+              }
+              setUsername(usernamesMap);
           } catch (error) {
               console.error('Error fetching restday requests:', error);
           }
@@ -27,6 +35,7 @@ const RestdayRequests = () => {
           await axios.put(`${SERVER_URL}/restday/${requestId}`, { status });
           const response = await axios.get(`${SERVER_URL}/restday`);
           setRequests(response.data);
+          console.log(response.data);
       } catch (error) {
           console.error('Error handling request:', error);
       }
@@ -42,21 +51,22 @@ const RestdayRequests = () => {
       }
   };
 
-  const fetchUsername = async (userId) => {
-    try {
-      const response = await axios.get(`${SERVER_URL}/user/${userId}`);
-      return response.data.username;
-    } catch (error) {
-      console.error('Error fetching username:', error);
-      return '';
-    }
-  };
-
+  // const fetchUsername = async () => {
+  //   try {
+  //     const response = await axios.get(`${SERVER_URL}/id:${requests.loginUserId}`);
+  //     setUsername(response.data);
+  //   } catch (error) {
+  //     console.error('Error fetching username:', error);
+  //     return '';
+  //   }
+  // };
+  // fetchUsername();
   return (
       <div className="restday-requests">
           <h1>Restday Requests</h1>
           {requests.map(request => (
               <div key={request.id}>
+                  <p>Employee : {username[request.loginUserId]}</p>
                   <p>Reason: {request.text} </p>
                   <p>Start Date: {new Date(request.date).toLocaleDateString()}</p>
                   <p>End Date: {new Date(request.endDate).toLocaleDateString()}</p>
