@@ -1,7 +1,8 @@
-// users.js
 import {database, syncDatabase} from './config.js';
 import { DataTypes } from 'sequelize';
 import { RestDayForm } from './restday.js';
+import { Productivity } from './productivity.js';
+
 
 export const User = database.define('logins', {
     userId:{
@@ -39,5 +40,11 @@ export const User = database.define('logins', {
 
 User.hasMany(RestDayForm, {foreignKey: 'loginUserId', foreignKeyConstraint: true});
 RestDayForm.belongsTo(User);
+
+User.hasOne(Productivity, {foreignKey: 'userId', foreignKeyConstraint: true});
+Productivity.belongsTo(User, {foreignKey: 'userId', foreignKeyConstraint: true});
+
+const queryInterface = database.getQueryInterface();
+Productivity.sync({force: true});
 
 await syncDatabase();

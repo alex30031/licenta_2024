@@ -3,9 +3,12 @@ import Navbar from '../../Components/Navbar/Navbar'
 import './ProfilePage.css'
 import { useState, useEffect } from 'react'
 import axios from 'axios';
+import {Line} from 'react-chartjs-2';
+import * as $ from 'jquery';
+import { useForm } from 'react-hook-form';
 
 
-
+const SERVER_URL = 'http://localhost:3000';
 
 const ProfileInfo = ({ decodedToken}) => { 
     return(
@@ -97,14 +100,142 @@ const ListRestdaysRequested = ({ decodedToken }) => {
   );
 };
 
-const ProductivityGraph = () => {
+const ProductivityGraph = ({decodedToken}) => {
+
+  const [fetched, setFetched] = useState(false);
+
+  const daysInThisMonth = () => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  };
+
+  const options = {
+    scales: {
+        x: {
+            type: 'linear',
+            position: 'bottom'
+        },
+        y: {
+            beginAtZero: true,
+        },
+    },
+};
+
+    var month_names = ['January', 'February', 'March', 
+               'April', 'May', 'June', 'July', 
+               'August', 'September', 'October', 'November', 'December'];
+    var date = new Date();
+    var month = month_names[date.getMonth()];
+    const { register, handleSubmit, } = useForm();
+    const [datasets, setDatasets] = useState(
+      {
+        label: 'Your Productivity',
+        data: Array(daysInThisMonth()).fill(0),
+        fill: false,
+        backgroundColor: 'rgb(60, 51, 92)',
+        borderColor: 'rgba(60, 51, 92, 0.3)',
+      },
+    )
+
+    const data = {
+      labels: Array.from({length: daysInThisMonth()}, (_, i) => i + 1),
+      datasets: [datasets],
+  };            
+
+  useEffect(() => {
+    if (decodedToken && !fetched) {
+      axios.get(`${SERVER_URL}/productivity/${decodedToken.userId}`)
+        .then(response => {
+          const productivityData = response.data;
+          setDatasets(prevState => ({
+            ...prevState,
+            data: productivityData,
+          }));
+          setFetched(true);
+        })
+        .catch(error => {
+          console.error('Error fetching productivity data:', error);
+        });
+    }
+  }, [decodedToken, fetched]);
+
+  const onSubmit = (d) => {
+    const prodValues = data.datasets[0].data.slice();
+    prodValues[d.day-1] = d.prod;
+  
+    setDatasets(prevState => ({
+      ...prevState,
+      data: prodValues,
+    }));
+  
+    axios.put(`${SERVER_URL}/productivity/${decodedToken.userId}`, { data: prodValues })
+      .catch(error => {
+        console.error('Error updating productivity data:', error);
+      });
+  
+    $('#productivity-form').trigger("reset");
+  };
+
+  const reset = () => {
+    var conf = window.confirm('Are you sure you want to reset the entire chart? We recommend doing it on the 1st of each month so that you can start fresh for that month!');
+    if (conf === true) {
+      const newData = Array(daysInThisMonth()).fill(0);
+      axios.put(`${SERVER_URL}/productivity/reset/${decodedToken.userId}`, { data: newData })
+        .then(response => {
+          setDatasets(prevState => ({
+            ...prevState,
+            data: newData,
+          }));
+        })
+        .catch(error => {
+          console.error('Error resetting productivity data:', error);
+        });
+    }
+  };
+
     return (
-        <div className="productivity-graph">
-            <h1>Productivity</h1>
-            <p>Coming soon...</p>
+        <div className='productivity-container'>
+            <h2 style={{textAlign: 'center'}}>Productivity For {month}</h2>
+            <form noValidate id="productivity-form" onSubmit={handleSubmit(onSubmit)}>
+                    <div className='inputs-productivity' style={{textAlign:'center'}}>
+                        <input
+                            placeholder="Enter Day Number"
+                            name="day"
+                            id="day-input"
+                            type='number'
+                            defaultValue={date.getDate()} 
+                            {...register("day",{
+                                required: {value: true, message: ""},
+                                min: {value: 1,  message: ""},
+                                max: {value: daysInThisMonth(),  message: ""},
+                            })} >
+                        </input>
+                        <input className="tick" type='submit' value='&#10003;'></input>
+                    </div>
+                    <div className='inputs-productivity' style={{textAlign:'center'}}>
+                        <input
+                            placeholder="Productivity Value"
+                            name="prod"
+                            id="prod-input"
+                            type='number' 
+                            {...register("prod",{
+                                required: {value: true, message: ""},
+                                min: {value: 0,  message: ""},
+                                max: {value: 10,  message: ""},
+                            })} >
+                        </input>
+                        <input className="tick" type='submit' value='&#10003;'></input>
+                    </div>
+                </form>  
+                <div style={{textAlign:'center'}}>
+                  <button onClick={reset} >Reset Full Chart</button>
+                </div>
+                <div className='line-chart'>
+                    <Line data={data} options={options} />
+                </div>
         </div>
     )
-}
+	}
 
 
 const UserProfilePage = ({ decodedToken }) => {
@@ -142,7 +273,7 @@ const UserProfilePage = ({ decodedToken }) => {
             case 'restDayForm':
                 return <RestDayForm/>;
             case 'productivityGraph':
-                return <ProductivityGraph/>;
+                return <ProductivityGraph decodedToken={decodedToken}/>;
             case 'restdayRequests':
                 return <ListRestdaysRequested decodedToken={decodedToken}/>;
             default:
