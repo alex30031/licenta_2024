@@ -1,42 +1,15 @@
-.homepage{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100%;
-    background-color: #f5f5f5;
-}
-/* I want the navbar to be at the top of the page */
-.navbar{
+.chat-button{
     position: fixed;
-    top: 0;
-    width: 100%;
+    bottom: 20px;
+    right: 20px;
+    background-color: #f5f5f5;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 100;
-    height: 60px;
-}
-/* I want the main section to be underneath the navbar */
-.main-section{
-    display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 100px;
-    width: 100%;
-/* I want the main section to be centered on the page */
-}
-
-/* I want the logo to be far left and the user menu far right */
-/* I want the user menu to be a dropdown and to be on the right of the page*/
-.logo{
-    margin-left: 20px;
-}
-.user-menu{
-    margin-right: 20px;
-   
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }

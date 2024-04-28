@@ -1,10 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../Components/Navbar/Navbar';
 import axios from 'axios';
+import "./Homepage.css"
+import chatIcon from "../../Components/Assets/chat_icon.png"
+import Chat from './Chat';
 
-const UserHomepage = ({ decodedToken}) => {
+
+const UserHomepage = ({ decodedToken, onLogout }) => {
+  const [showChat, setShowChat] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [ws, setWs] = useState(null);
+
   const SERVER_URL = 'http://localhost:3000';
+  const WS_SERVER_URL = 'ws://localhost:8080';
+
+  useEffect(() => {
+    const ws = new WebSocket(WS_SERVER_URL);
+
+    setWs(ws);
+    return () => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.close();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -19,7 +38,7 @@ const UserHomepage = ({ decodedToken}) => {
         console.error('Error fetching user data:', error);
       }
     };
-  
+
     if (decodedToken) {
       fetchUserData();
     }
@@ -37,10 +56,18 @@ const UserHomepage = ({ decodedToken}) => {
 
   return (
     <div>
-      {decodedToken && <Navbar decodedToken={decodedToken} onLogout = {handleLogout} />}
+      {decodedToken && <Navbar decodedToken={decodedToken} onLogout={handleLogout} />}
       {userData && <h1>Welcome to the homepage, {userData.username}!</h1>}
       {!userData && <h1>Welcome to the homepage!</h1>}
-    </div>
+       <button 
+      type='button' 
+      className="chat-button" 
+      onClick={() => setShowChat(!showChat)
+      }>
+        <img src={chatIcon} alt="Chat" />
+      </button> 
+       {<Chat ws={ws} decodedToken={decodedToken} showChat={showChat} />}
+      </div>
   );
 };
 

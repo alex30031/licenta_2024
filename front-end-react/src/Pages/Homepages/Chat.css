@@ -1,0 +1,96 @@
+.chat-container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 20cm;
+    height: auto;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    margin-bottom: 100px;
+    margin-right: 25px;
+    display: flex;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .chat-container.visible {
+    display: flex;
+  }
+  
+  .user-list {
+    overflow-y: auto;
+    max-height: 300px;
+    width: 30%;
+    padding-inline-start: 0px;
+    
+  }
+  
+  .chat-area {
+    height: 325px; /* Setează o înălțime maximă */
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;;
+  }
+  
+  .chat-area h2 {
+    margin-top: 9px;
+    margin-bottom: 10px;
+  }
+  
+  .chat-area .messages {
+    flex-grow: 1;
+    overflow-y: auto; /* Adaugă această linie */
+  }
+  
+  .chat-area p {
+    margin: 0;
+    margin-bottom: 10px;
+  }
+  
+  .chat-area form {
+    display: flex;
+    background-color: lightgray;
+    position: sticky;
+    bottom: 0;
+  }
+  
+  .chat-area form input {
+    flex-grow: 1;
+    margin-right: 10px;
+  }
+  
+  .chat-area form button {
+    padding: 5px 10px;
+  }
+  
+  .list-items {
+    padding: 2px;
+    border: 1px solid #ccc; 
+    list-style-type: none; 
+    
+  }
+  
+  .list-items:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .list{
+    padding-inline-start: 0px;
+    margin : 0 px;
+  }
+  
+  .right {
+    text-align: right;
+    color: blue; /* or any color you prefer for the sender's messages */
+  }
+  
+  .left {
+    text-align: left;
+    color: red; /* or any color you prefer for the recipient's messages */
+  }
+
+  

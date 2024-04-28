@@ -10,7 +10,8 @@
     "sequelize": "^6.37.0",
     "sqlite3": "^5.1.7",
     "stream-browserify": "^3.0.0",
-    "util": "^0.12.5"
+    "util": "^0.12.5",
+    "ws": "^8.17.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.3"

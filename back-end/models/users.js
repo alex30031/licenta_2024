@@ -45,6 +45,6 @@ User.hasOne(Productivity, {foreignKey: 'userId', foreignKeyConstraint: true});
 Productivity.belongsTo(User, {foreignKey: 'userId', foreignKeyConstraint: true});
 
 const queryInterface = database.getQueryInterface();
-Productivity.sync({force: true});
+
 
 await syncDatabase();
