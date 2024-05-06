@@ -12,7 +12,7 @@ const login = async (req, res) => {
   try {
     const user = await User.findOne({ where: { email } });
     if (user && user.password === password) {
-      const token = jwt.sign({ userId: user.userId, email: user.email, username: user.username, accountType: user.accountType }, jwt_secret , { expiresIn: '1h' });
+      const token = jwt.sign({ userId: user.userId, email: user.email, username: user.username, accountType: user.accountType, jobName : user.jobName }, jwt_secret , { expiresIn: '1h' });
       res.status(200).json({ message: 'Autentificare reușită!', token}); 
     } else {
       res.status(401).json({ message: 'Adresa de email sau parola incorectă.' });
@@ -41,22 +41,28 @@ const createUser = async (req, res) => {
 };
 
 const getUsers = async (req, res) => {
-    const usernameQuery = req.query.username;
-    const where = usernameQuery ? { username: { [Op.like]: `%${usernameQuery}%` } } : {};
-    const usersList = await User.findAll({ where: where });
-    res.status(200).send({records: usersList});
+  const usernameQuery = req.query.username;
+  const where = usernameQuery ? { username: { [Op.like]: `%${usernameQuery}%` } } : {};
+  const usersList = await User.findAll({ 
+    where: where,
+    attributes: ['userId', 'username', 'email', 'jobName']
+  });
+  res.status(200).send({records: usersList});
 }
 
 const getUserById = async (req, res) => {
   const userId = req.params.userId;
-  const user = await User.findOne({ where: { userId: userId } }); 
-  if (user) {
-      res.status(200).send(user);
-  } else {
-      res.status(404).send({ message: `Nu am găsit niciun utilizator cu id-ul ${userId}.` });
-  }
-}
+  const user = await User.findOne({ 
+    where: { userId: userId },
+    attributes: ['userId', 'username', 'email', 'jobName'] 
+  }); 
 
+  if (user) {
+    res.status(200).send(user);
+  } else {
+    res.status(404).send({ message: `Nu am găsit niciun utilizator cu id-ul ${userId}.` });
+  }
+};
 
 
 
@@ -87,6 +93,26 @@ const deleteUser = async (req, res) => {
     }
   }
 
+  const setJob = async (req, res) => {
+    console.log(req.body, req.params)
+    console.log("a")
+    const userId = req.params.userId;
+    const {job: jobName} = req.body;
+
+    try {
+        const updatedJob = await User.update({jobName}, { where: { userId: userId } });
+        if (updatedJob) {
+            res.status(200).send({ message: `Job-ul utilizatorului cu id-ul ${userId} a fost actualizat.` });
+            console.log("a");
+        } else {
+            res.status(404).send({ message: `Nu am găsit niciun utilizator cu id-ul ${userId}.` });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'A apărut o eroare la actualizarea job-ului utilizatorului.' });
+    }
+  }
+
   const logout = async (req, res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -108,7 +134,8 @@ export{
     createUser,
     updateUser,
     deleteUser,
-    logout
+    logout,
+    setJob
 }
 
 

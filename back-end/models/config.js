@@ -4,8 +4,8 @@ export const database = new Sequelize({
   dialect: "sqlite",
   storage: "storage.sqlite",
   pool: {
-    max: 5, // Adjust the maximum number of connections
-    min: 0, // Adjust the minimum number of connections
+    max: 5, 
+    min: 0, 
     acquire: 30000,
     idle: 10000,
   },

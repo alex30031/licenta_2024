@@ -11,12 +11,14 @@ import { useForm } from 'react-hook-form';
 const SERVER_URL = 'http://localhost:3000';
 
 const ProfileInfo = ({ decodedToken}) => { 
+  console.log(decodedToken)
     return(
         <ul className="profile-form">
             <h1>Profile info</h1>
             <li>Username: {decodedToken && decodedToken.username}</li>
             <li>Email: {decodedToken && decodedToken.email}</li>
             <li>Account Type: {decodedToken && decodedToken.accountType}</li>
+            <li>Job: {decodedToken && decodedToken.jobName}</li>
         </ul>
     )
 }
@@ -237,6 +239,46 @@ const ProductivityGraph = ({decodedToken}) => {
     )
 	}
 
+  const Payslip =({decodedToken}) => {
+    const [workday, setWorkday] = useState(null);
+
+    useEffect(() => {
+      const fetchWorkday = async () => {
+        const date = new Date();
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+        const month = String(monthNames[date.getMonth()]); // JavaScript months are 0-indexed.
+        try {
+          const response = await axios.get(`${SERVER_URL}/workday/${decodedToken.userId}`, { params: { month } });
+          setWorkday(response.data);
+        } catch (error) {
+          console.error('Error fetching workday:', error);
+        }
+      };
+  
+      if (decodedToken.userId) {
+        fetchWorkday();
+      }
+    }, [decodedToken.userId]);
+
+    return (
+      <div>
+        <h1 className='payslip-title'>Payslip</h1>
+        {workday ? (
+          <div className='payslip-get'>
+            <p>Month: {workday.month}</p>
+            <p>Worked Days: {workday.workDays}</p>
+            <p>Daily Wage: {workday.dailyWage}</p>
+            <p>Monthly Salary: {workday.workDays * workday.dailyWage}</p>
+          </div>
+        ) : (
+          <p>Loading...</p>
+        )}
+      </div>
+    );
+  }
+
 
 const UserProfilePage = ({ decodedToken }) => {
     const [activeFunc, setActiveFunc] = useState('profileInfo');
@@ -276,6 +318,8 @@ const UserProfilePage = ({ decodedToken }) => {
                 return <ProductivityGraph decodedToken={decodedToken}/>;
             case 'restdayRequests':
                 return <ListRestdaysRequested decodedToken={decodedToken}/>;
+            case 'payslip':
+                return <Payslip decodedToken={decodedToken}/>;
             default:
                 return <ProfileInfo decodedToken={decodedToken}/>;
         }
@@ -291,6 +335,7 @@ const UserProfilePage = ({ decodedToken }) => {
               <li onClick={() => switchFunc('restDayForm')}>Restday request</li>
               <li onClick={() => switchFunc('productivityGraph')}>Productivity</li>
               <li onClick={() => switchFunc('restdayRequests')}>Restday requests list</li>
+              <li onClick={() => switchFunc('payslip')}>Payslip</li>
             </ul>
           </div>
         </div>

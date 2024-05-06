@@ -27,7 +27,7 @@
   }
   
   .chat-area {
-    height: 325px; /* Setează o înălțime maximă */
+    height: 325px; 
     display: flex;
     flex-direction: column;
     width: 60%;
@@ -43,7 +43,7 @@
   
   .chat-area .messages {
     flex-grow: 1;
-    overflow-y: auto; /* Adaugă această linie */
+    overflow-y: auto; 
   }
   
   .chat-area p {
@@ -85,12 +85,10 @@
   
   .right {
     text-align: right;
-    color: blue; /* or any color you prefer for the sender's messages */
-  }
+    color: blue; }
   
   .left {
     text-align: left;
-    color: red; /* or any color you prefer for the recipient's messages */
-  }
+    color: red; }
 
   

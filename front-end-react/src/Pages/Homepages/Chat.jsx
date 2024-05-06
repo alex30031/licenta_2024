@@ -36,7 +36,6 @@ const Chat = ({ showChat, decodedToken, ws }) => {
       ws.onmessage = (event) => {
         const message = JSON.parse(event.data);
         setUserMessages((prevUserMessages) => {
-          // Ensure the recipient's message array exists
           if (!prevUserMessages[message.recipient]) {
             prevUserMessages[message.recipient] = [];
           }
@@ -104,14 +103,19 @@ const Chat = ({ showChat, decodedToken, ws }) => {
         </ul>
       </div>
       <div className="chat-area">
-        <h2>Chat with {selectedUser ? selectedUser.username : 'Select a user'}</h2>
+        <h2>{selectedUser ? selectedUser.username : 'Select a user'}</h2>
         <div className="messages">
-          {messages.map((message, index) => (
-            <p key={index} className={message.sender === decodedToken.username ? 'right' : 'left'}>
+        {messages.map((message, index) => (
+          <div key={index}>
+            <p className={message.sender === decodedToken.username ? 'right' : 'left'}>
+              <strong>{message.sender === decodedToken.username ? 'You' : message.sender}</strong>
+            </p>
+            <p className={message.sender === decodedToken.username ? 'right' : 'left'}>
               {message.text}
             </p>
-          ))}
-        </div>
+          </div>
+        ))}
+      </div>
         <form onSubmit={handleSendMessage}>
           <input type="text" value={newMessage} onChange={(event) => setNewMessage(event.target.value)} />
           <button type="submit">Trimite</button>

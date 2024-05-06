@@ -10,6 +10,109 @@ import { useForm } from 'react-hook-form';
 
 const SERVER_URL = 'http://localhost:3000';
 
+const UserList = () => {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(`${SERVER_URL}/users`);
+        setUsers(response.data.records);
+      } catch (error) {
+        console.error('Failed to fetch users:', error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  return (
+    <ul className='ul-info'>
+      {users.map((user) => (
+        <li className='li-info' key={user.id}>
+         User ID: {user.userId} Username: {user.username} - Email: {user.email} - Job: {user.jobName}
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+const SetInfo = () => {
+  const [userId, setUserId] = useState('');
+  const [job, setJob] = useState('');
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      window.location.reload();
+      const response = await axios.put(`${SERVER_URL}/job/${userId}`, { job });
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <form className='info-form' onSubmit={handleSubmit}>
+      <label>
+        User ID:
+        <input className='info-input' type="text" value={userId} onChange={(e) => setUserId(e.target.value)} />
+      </label>
+      <label>
+        Job:
+        <input className='info-input' type="text" value={job} onChange={(e) => setJob(e.target.value)} />
+      </label>
+      <button className='info-submit' type="submit">Set Job</button>
+    </form>
+  );
+};
+
+
+
+const Payslip = () => {
+  const [userId, setUserId] = useState('');
+  const [month, setMonth] = useState('');
+  const [dailyWage, setDailyWage] = useState('');
+
+  useEffect(() => {
+    const date = new Date();
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    const currentMonth = String(monthNames[date.getMonth()]);
+    setMonth(currentMonth);
+  }, []);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await axios.post(`${SERVER_URL}/workday/${userId}`, { month, dailyWage });
+      alert('Payslip created successfully');
+    } catch (error) {
+      alert('Failed to create payslip');
+    }
+  };
+
+  return (
+      <form className='payslip-form' onSubmit={handleSubmit}>
+          <label>
+              User ID:
+              <input className='payslip-input' type="text" value={userId} onChange={(e) => setUserId(e.target.value)} required />
+          </label>
+          <label>
+              Month:
+              <input className='payslip-input' type="text" value={month} onChange={(e) => setMonth(e.target.value)} required />
+          </label>
+          <label>
+              Daily Wage:
+              <input className='payslip-input' type="number" value={dailyWage} onChange={(e) => setDailyWage(e.target.value)} required />
+          </label>
+          <input className='payslip-button'type="submit" value="Create Payslip" />
+      </form>
+  );
+};
+
 const RestdayRequests = () => {
   const [requests, setRequests] = useState([]);
   const [username, setUsername] = useState('');
@@ -233,6 +336,9 @@ const ProductivityGraph = ({decodedToken}) => {
 	}
 
 
+  
+
+
 const AdminProfilePage = ({ decodedToken }) => {
     const [activeFunc, setActiveFunc] = useState('profileInfo');
     const [userData, setUserData] = useState(null);
@@ -269,6 +375,12 @@ const AdminProfilePage = ({ decodedToken }) => {
                 return <ProductivityGraph decodedToken={decodedToken}/>;
             case 'restdayRequests':
                 return <RestdayRequests/>;
+            case 'payslip':
+                return <Payslip/>;
+            case 'setInfo':
+                return <SetInfo/>;
+            case 'userList':
+                return <UserList/>;
             default:
                 return <ProfileInfo decodedToken={decodedToken}/>;
         }
@@ -283,6 +395,9 @@ const AdminProfilePage = ({ decodedToken }) => {
               <li onClick={() => switchFunc('profileInfo')}>Profile Info</li>
               <li onClick={() => switchFunc('productivityGraph')}>Productivity</li>
               <li onClick={() => switchFunc('restdayRequests')}>Restday Requests</li>
+              <li onClick={() => switchFunc('payslip')}>Payslip</li>
+              <li onClick={() => switchFunc('setInfo')}>Set User Info</li>
+              <li onClick={() => switchFunc('userList')}>User List</li>
             </ul>
           </div>
         </div>

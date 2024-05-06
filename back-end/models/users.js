@@ -2,6 +2,7 @@ import {database, syncDatabase} from './config.js';
 import { DataTypes } from 'sequelize';
 import { RestDayForm } from './restday.js';
 import { Productivity } from './productivity.js';
+import { Workday } from './workday.js';
 
 
 export const User = database.define('logins', {
@@ -28,6 +29,11 @@ export const User = database.define('logins', {
         type: DataTypes.ENUM('admin', 'user'),
         allowNull: false
     },
+    jobName:{
+        type: DataTypes.STRING,
+        allowNull: true
+    }
+    
 },
     {
         indexes: [
@@ -43,6 +49,9 @@ RestDayForm.belongsTo(User);
 
 User.hasOne(Productivity, {foreignKey: 'userId', foreignKeyConstraint: true});
 Productivity.belongsTo(User, {foreignKey: 'userId', foreignKeyConstraint: true});
+
+User.hasMany(Workday, {foreignKey: 'userId', foreignKeyConstraint: true});
+Workday.belongsTo(User, {foreignKey: 'userId', foreignKeyConstraint: true});
 
 const queryInterface = database.getQueryInterface();
 

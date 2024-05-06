@@ -16,8 +16,7 @@ app.use("/", indexRouter);
 const wss = new WebSocket.Server({ port: 8080 });
 
 const clients = new Map();
-const messages = new Map(); // Store messages here
-
+const messages = new Map(); 
 wss.on('connection', (ws) => {
   let currentUser;
 
@@ -32,12 +31,10 @@ wss.on('connection', (ws) => {
       return;
     }
 
-    // Add the new connection to the sender's list of connections
     const senderConnections = clients.get(sender) || new Set();
     senderConnections.add(ws);
     clients.set(sender, senderConnections);
 
-    // Remove the connection when it's closed
     ws.on('close', () => {
       senderConnections.delete(ws);
       if (senderConnections.size === 0) {
@@ -45,7 +42,6 @@ wss.on('connection', (ws) => {
       }
     });
 
-    // Forward the message to the recipient
     const recipientConnections = clients.get(recipient);
     if (recipientConnections) {
       recipientConnections.forEach((recipientWs) => {
@@ -54,13 +50,11 @@ wss.on('connection', (ws) => {
         }
       });
     } else {
-      // Store the message if the recipient is not connected
       const recipientMessages = messages.get(recipient) || [];
       recipientMessages.push({ sender, text });
       messages.set(recipient, recipientMessages);
     }
 
-    // Also send the message back to the sender
     senderConnections.forEach((senderWs) => {
       if (senderWs.readyState === WebSocket.OPEN) {
         senderWs.send(JSON.stringify({ sender, text }));
@@ -68,7 +62,6 @@ wss.on('connection', (ws) => {
     });
   });
 
-  // Send stored messages when a new connection is established
   ws.on('open', () => {
     const recipientMessages = messages.get(currentUser);
     if (recipientMessages) {
@@ -79,7 +72,6 @@ wss.on('connection', (ws) => {
     }
   });
 
-  // Check if both users are connected and send any stored messages
   const senderConnections = clients.get(currentUser);
   if (senderConnections) {
     senderConnections.forEach((senderWs) => {

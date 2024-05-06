@@ -182,3 +182,115 @@ button{
         width: 80%;
     }
 }
+
+.payslip-form{
+    margin: auto;
+    background-color: white;
+    width: fit-content;
+    height: auto;
+    border-radius: 5px;
+    list-style-type: none;
+    padding: 10px;
+    text-align: center;
+    margin-top: 50px;
+    display:grid;
+}
+
+.payslip-get{
+    margin: auto;
+    width: fit-content;
+    height: auto;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    margin-top: 10px;
+    background-color: white;
+}
+
+.payslip-title{
+    margin: auto;
+    background-color: white;
+    width: fit-content;
+    height: auto;
+    border-radius: 5px;
+    list-style-type: none;
+    padding: 10px;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.payslip-input{
+    margin: auto;
+    height: auto;
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+    margin-top: 10px;
+    background-color: white;
+}
+
+.payslip-button{
+    margin: auto;
+    width: fit-content;
+    height: auto;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    margin-top: 10px;
+    background-color: gray;
+}
+
+.info-form{
+    margin: auto;
+    background-color: white;
+    width: fit-content;
+    height: auto;
+    border-radius: 5px;
+    list-style-type: none;
+    padding: 10px;
+    text-align: center;
+    margin-top: 50px;
+    display:grid;
+}
+
+.info-input{
+
+    margin: auto;
+    height: auto;
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+    margin-top: 10px;
+    background-color: white;
+}
+
+.info-submit{
+    margin: auto;
+    width: fit-content;
+    height: auto;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    margin-top: 10px;
+    background-color: gray;
+}
+
+.ul-info{
+    margin: auto;
+    background-color: white;
+    width: fit-content;
+    height: auto;
+    border-radius: 5px;
+    list-style-type: none;
+    padding: 10px;
+    text-align: center;
+    margin-top: 50px;
+    overflow-y: scroll;
+    max-height: 600px;
+}
+
+.li-info{
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px;
+}
