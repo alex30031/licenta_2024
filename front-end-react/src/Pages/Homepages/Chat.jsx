@@ -105,17 +105,24 @@ const Chat = ({ showChat, decodedToken, ws }) => {
       <div className="chat-area">
         <h2>{selectedUser ? selectedUser.username : 'Select a user'}</h2>
         <div className="messages">
-        {messages.map((message, index) => (
-          <div key={index}>
-            <p className={message.sender === decodedToken.username ? 'right' : 'left'}>
-              <strong>{message.sender === decodedToken.username ? 'You' : message.sender}</strong>
-            </p>
-            <p className={message.sender === decodedToken.username ? 'right' : 'left'}>
-              {message.text}
-            </p>
-          </div>
-        ))}
+  {messages.map((message, index) => {
+    const previousMessage = messages[index - 1];
+    const showSender = index === 0 || message.sender !== previousMessage.sender;
+
+    return (
+      <div key={index}>
+        {showSender && (
+          <p className={message.sender === decodedToken.username ? 'right' : 'left'}>
+            <strong>{message.sender === decodedToken.username ? 'You' : message.sender}</strong>
+          </p>
+        )}
+        <p className={message.sender === decodedToken.username ? 'right' : 'left'}>
+          {message.text}
+        </p>
       </div>
+    );
+  })}
+</div>
         <form onSubmit={handleSendMessage}>
           <input type="text" value={newMessage} onChange={(event) => setNewMessage(event.target.value)} />
           <button type="submit">Trimite</button>

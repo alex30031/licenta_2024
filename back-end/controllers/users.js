@@ -8,7 +8,6 @@ const jwt_secret = 'ddjash2bj12b312nbbd3i2b983d2hdksahd91ks';
 const login = async (req, res) => {
   console.log("am ajuns aici");
   const { email, password } = req.body;
-
   try {
     const user = await User.findOne({ where: { email } });
     if (user && user.password === password) {

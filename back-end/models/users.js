@@ -4,7 +4,6 @@ import { RestDayForm } from './restday.js';
 import { Productivity } from './productivity.js';
 import { Workday } from './workday.js';
 
-
 export const User = database.define('logins', {
     userId:{
         type: DataTypes.INTEGER,
@@ -54,6 +53,4 @@ User.hasMany(Workday, {foreignKey: 'userId', foreignKeyConstraint: true});
 Workday.belongsTo(User, {foreignKey: 'userId', foreignKeyConstraint: true});
 
 const queryInterface = database.getQueryInterface();
-
-
 await syncDatabase();
