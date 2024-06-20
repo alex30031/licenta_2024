@@ -3,6 +3,8 @@ import { DataTypes } from 'sequelize';
 import { RestDayForm } from './restday.js';
 import { Productivity } from './productivity.js';
 import { Workday } from './workday.js';
+import { Task } from './task.js';
+import { Event } from './event.js';
 
 export const User = database.define('logins', {
     userId:{
@@ -51,6 +53,12 @@ Productivity.belongsTo(User, {foreignKey: 'userId', foreignKeyConstraint: true})
 
 User.hasMany(Workday, {foreignKey: 'userId', foreignKeyConstraint: true});
 Workday.belongsTo(User, {foreignKey: 'userId', foreignKeyConstraint: true});
+
+User.hasMany(Task, {foreignKey: 'userId', foreignKeyConstraint: true});
+Task.belongsTo(User, {foreignKey: 'userId', foreignKeyConstraint: true});
+
+User.hasOne(Event, {foreignKey: 'userId', foreignKeyConstraint: true});
+Event.belongsTo(User, {foreignKey: 'userId', foreignKeyConstraint: true});
 
 const queryInterface = database.getQueryInterface();
 await syncDatabase();

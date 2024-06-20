@@ -14,7 +14,7 @@ const getWorkdaysInMonth = (month, year) => {
 
 const createWorkdayForUser = async (req, res) => {
   const userId = req.params.userId;
-  const { month, dailyWage } = req.body;
+  const { month, dailyWage, overtimeHours } = req.body;
   try {
     const date = new Date();
     const year = date.getFullYear();
@@ -24,7 +24,8 @@ const createWorkdayForUser = async (req, res) => {
       userId,
       month,
       workDays,
-      dailyWage
+      dailyWage,
+      overtimeHours
     });
     res.json(workday);
   } catch (error) {
@@ -32,6 +33,31 @@ const createWorkdayForUser = async (req, res) => {
     res.status(500).json({ error: 'Error creating workday for user' });
   }
 };
+
+const updateWorkdayForUser = async (req, res) => {
+  const userId = req.params.userId;
+  const { month, dailyWage, overtimeHours } = req.body;
+  try {
+    const workday = await Workday.findOne({
+      where: {
+        userId,
+        month
+      }
+    });
+    if (!workday) {
+      res.status(404).json({ error: 'Workday not found' });
+    } else {
+      const updatedWorkday = await workday.update({
+        dailyWage,
+        overtimeHours
+      });
+      res.json(updatedWorkday);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error updating workday for user' });
+  }
+}
 
 const getWorkdayForUser = async (req, res) => {
   const userId = req.params.userId;
@@ -56,5 +82,6 @@ const getWorkdayForUser = async (req, res) => {
 
 export {
   createWorkdayForUser,
-  getWorkdayForUser
+  getWorkdayForUser,
+  updateWorkdayForUser
 };

@@ -4,6 +4,7 @@ import axios from 'axios';
 import "./Homepage.css"
 import chatIcon from "../../Components/Assets/chat_icon.png"
 import Chat from './Chat';
+import Calendar from './Calendar';
 
 
 const AdminHomepage = ({ decodedToken, onLogout }) => {
@@ -59,6 +60,7 @@ const AdminHomepage = ({ decodedToken, onLogout }) => {
       {decodedToken && <Navbar decodedToken={decodedToken} onLogout={handleLogout} />}
       {userData && <h1>Welcome to the admin homepage, {userData.username}!</h1>}
       {!userData && <h1>Welcome to the admin homepage!</h1>}
+      {<Calendar decodedToken = {decodedToken} />}
        <button 
       type='button' 
       className="chat-button" 

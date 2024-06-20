@@ -30,10 +30,79 @@ const UserList = () => {
     <ul className='ul-info'>
       {users.map((user) => (
         <li className='li-info' key={user.id}>
-         User ID: {user.userId} Username: {user.username} - Email: {user.email} - Job: {user.jobName}
+         User ID: {user.userId} - Username: {user.username} - Email: {user.email} - Job: {user.jobName}
         </li>
       ))}
     </ul>
+  );
+};
+
+const CreateTask = () => {
+  const [userId, setUserId] = useState('');
+  const [name, setTaskName] = useState('');
+  const [description, setTaskDescription] = useState('');
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post(`${SERVER_URL}/task`, {name, description , userId });
+      console.log(response.data);
+      alert('Task created successfully');
+    } catch (error) {
+      console.error('Failed to create task:', error);
+      alert('Failed to create task');
+    }
+  };
+
+  return (
+    <form className='task-form' onSubmit={handleSubmit}>
+      <label>
+        User ID:
+        <input className='task-input' type="text" value={userId} onChange={(e) => setUserId(e.target.value)} required />
+      </label>
+      <label>
+        Task Name:
+        <input className='task-input' type="text" value={name} onChange={(e) => setTaskName(e.target.value)} required />
+      </label>
+      <label>
+        Task Description:
+        <input className='task-input' type="text" value={description} onChange={(e) => setTaskDescription(e.target.value)} required />
+      </label>
+      <button className='task-submit' type="submit">Create Task</button>
+    </form>
+  );
+};
+
+const UserTaskList = () => {
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await axios.get(`${SERVER_URL}/tasks`);
+        setTasks(response.data);
+      } catch (error) {
+        console.error('Failed to fetch tasks:', error);
+      }
+    };
+
+    fetchTasks();
+  }, []);
+
+  return (
+    <div>
+    <h1 className="title-for-tasks">All Tasks</h1>
+    <div className='tasks-list-users'>
+      {tasks.map((task) => (
+        <div key={task.taskId}>
+          <h2>Task Name: {task.name}</h2>
+          <p>Description: {task.description}</p>
+          <p>Status: {task.status}</p>
+          <p>User ID: {task.userId}</p>
+        </div>
+      ))}
+    </div>
+  </div>
   );
 };
 
@@ -74,6 +143,7 @@ const Payslip = () => {
   const [userId, setUserId] = useState('');
   const [month, setMonth] = useState('');
   const [dailyWage, setDailyWage] = useState('');
+  const [overtimeHours, setOvertimeHours] = useState('');
 
   useEffect(() => {
     const date = new Date();
@@ -87,15 +157,25 @@ const Payslip = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post(`${SERVER_URL}/workday/${userId}`, { month, dailyWage });
+      await axios.post(`${SERVER_URL}/workday/${userId}`, { month, dailyWage, overtimeHours });
       alert('Payslip created successfully');
     } catch (error) {
       alert('Failed to create payslip');
     }
   };
 
+  const handleUpdate = async (event) => {
+    event.preventDefault();
+    try {
+      await axios.put(`${SERVER_URL}/workday/${userId}`, { month, dailyWage, overtimeHours });
+      alert('Payslip updated successfully');
+    } catch (error) {
+      alert('Failed to update payslip');
+    }
+  }
+
   return (
-      <form className='payslip-form' onSubmit={handleSubmit}>
+      <form className='payslip-form' >
           <label>
               User ID:
               <input className='payslip-input' type="text" value={userId} onChange={(e) => setUserId(e.target.value)} required />
@@ -108,7 +188,12 @@ const Payslip = () => {
               Daily Wage:
               <input className='payslip-input' type="number" value={dailyWage} onChange={(e) => setDailyWage(e.target.value)} required />
           </label>
-          <input className='payslip-button'type="submit" value="Create Payslip" />
+          <label>
+              Overtime Hours:
+              <input className='payslip-input' type='number' value={overtimeHours} onChange={(e) => setOvertimeHours(e.target.value)} required />
+          </label>
+          <input className='payslip-button' onSubmit={handleSubmit} type="submit" value="Create Payslip" />
+          <input className='payslip-button' onClick={handleUpdate} type="submit" value="Update Payslip" />
       </form>
   );
 };
@@ -381,6 +466,10 @@ const AdminProfilePage = ({ decodedToken }) => {
                 return <SetInfo/>;
             case 'userList':
                 return <UserList/>;
+            case 'createTask':
+                return <CreateTask/>;
+            case 'userTaskList':
+                return <UserTaskList/>;
             default:
                 return <ProfileInfo decodedToken={decodedToken}/>;
         }
@@ -398,6 +487,8 @@ const AdminProfilePage = ({ decodedToken }) => {
               <li onClick={() => switchFunc('payslip')}>Payslip</li>
               <li onClick={() => switchFunc('setInfo')}>Set User Info</li>
               <li onClick={() => switchFunc('userList')}>User List</li>
+              <li onClick={() => switchFunc('createTask')}>Create Task</li>
+              <li onClick={() => switchFunc('userTaskList')}>User Task List</li>
             </ul>
           </div>
         </div>

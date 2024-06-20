@@ -6,6 +6,8 @@ import axios from 'axios';
 import {Line} from 'react-chartjs-2';
 import * as $ from 'jquery';
 import { useForm } from 'react-hook-form';
+import { jsPDF} from 'jspdf';
+import html2canvas from 'html2canvas';
 
 
 const SERVER_URL = 'http://localhost:3000';
@@ -239,16 +241,17 @@ const ProductivityGraph = ({decodedToken}) => {
     )
 	}
 
-  const Payslip =({decodedToken}) => {
+  const Payslip = ({ decodedToken }) => {
     const [workday, setWorkday] = useState(null);
-
+  
     useEffect(() => {
       const fetchWorkday = async () => {
         const date = new Date();
         const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-      ];
-        const month = String(monthNames[date.getMonth()]); // JavaScript months are 0-indexed.
+          'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        const month = String(monthNames[date.getMonth()]);
+        
         try {
           const response = await axios.get(`${SERVER_URL}/workday/${decodedToken.userId}`, { params: { month } });
           setWorkday(response.data);
@@ -261,23 +264,73 @@ const ProductivityGraph = ({decodedToken}) => {
         fetchWorkday();
       }
     }, [decodedToken.userId]);
-
+  
+    const exportPDF = () => {
+      const input = document.getElementById('payslip-container');
+      const inputWidth = input.offsetWidth;
+      const inputHeight = input.offsetHeight;
+  
+      // Increase the scale for better resolution
+      html2canvas(input, { scale: 2 })
+          .then((canvas) => {
+              const imgWidth = 210; // A4 width in mm
+              const imgHeight = (canvas.height * imgWidth) / canvas.width; // Calculate the height to maintain aspect ratio
+              const imgData = canvas.toDataURL('image/png');
+  
+              // Initialize jsPDF in portrait or landscape mode based on content size
+              const pdf = new jsPDF(inputWidth > inputHeight ? 'l' : 'p', 'mm', 'a4');
+              const pdfWidth = pdf.internal.pageSize.getWidth();
+              const pdfHeight = pdf.internal.pageSize.getHeight();
+  
+              // Calculate positions to center the image
+              const x = (pdfWidth - imgWidth) / 2;
+              const y = (pdfHeight - imgHeight) / 2;
+  
+              pdf.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight);
+              pdf.save("payslip.pdf");
+          });
+  }
+  
+    if (!workday) {
+      return <p className='loading-message'>Loading...</p>;
+    }
+    const overtimeWagePerHour = workday.dailyWage * 2 / 8;
+    const grossSalary = workday.workDays * workday.dailyWage + overtimeWagePerHour * workday.overtimeHours;
+    const cas = grossSalary * 25 / 100;
+    const cass = grossSalary * 10 / 100;
+    const netIncome = grossSalary - cas - cass;
+    const incomeTax = netIncome * 10 / 100;
+    const netSalary = netIncome - incomeTax;
+    const foodStamps = 30 * workday.workDays;
+  
     return (
-      <div>
-        <h1 className='payslip-title'>Payslip</h1>
-        {workday ? (
-          <div className='payslip-get'>
-            <p>Month: {workday.month}</p>
-            <p>Worked Days: {workday.workDays}</p>
-            <p>Daily Wage: {workday.dailyWage}</p>
-            <p>Monthly Salary: {workday.workDays * workday.dailyWage}</p>
-          </div>
-        ) : (
-          <p>Loading...</p>
-        )}
+      <div><h1 className='payslip-title'>Payslip</h1>
+      <div className="payslip-container" id="payslip-container"> 
+        <div className='payslip-get'>
+          <p>User: {decodedToken.username}</p>
+          <p>----------------------------</p>
+          <p>Month: {workday.month}</p>
+          <p>Worked Days: {workday.workDays}</p>
+          <p>Overtime hours: {workday.overtimeHours}</p>
+          <p>Overtime wage per hour: {overtimeWagePerHour}</p>
+          <p>Daily Wage: {workday.dailyWage}</p>
+          <p>----------------------------</p>
+          <p>Gross Salary: {grossSalary}</p>
+          <p>CAS 25% : {cas}</p>
+          <p>CASS 10% : {cass}</p>
+          <p>----------------------------</p>
+          <p>Net Income : {netIncome}</p>
+          <p>Income Tax : {incomeTax}</p>
+          <p>----------------------------</p>
+          <p>Net Salary: {netSalary}</p>
+          <p>Food stamps : {foodStamps}</p>
+        </div>
+        
+      </div>
+      <button className="button-pdf"onClick={exportPDF}>Export as PDF</button>
       </div>
     );
-  }
+  };
 
 
 const UserProfilePage = ({ decodedToken }) => {

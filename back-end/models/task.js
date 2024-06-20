@@ -1,23 +1,24 @@
 import {database, syncDatabase} from './config.js';
 import { DataTypes } from 'sequelize';
 
-export const Workday = database.define('workdays', {
-    id: {
+export const Task = database.define('tasks', {
+    taskId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    month: {
+    name: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    workDays: {
-        type: DataTypes.INTEGER,
-        allowNull: false
+    description: {
+        type: DataTypes.TEXT,
+        allowNull: true
     },
-    dailyWage: {
-        type: DataTypes.FLOAT,
-        allowNull: false
+    status: {
+        type: DataTypes.ENUM('new', 'in completion', 'finished'),
+        allowNull: false,
+        defaultValue: 'new'
     },
     userId: {
         type: DataTypes.INTEGER,
@@ -26,13 +27,8 @@ export const Workday = database.define('workdays', {
             model: 'logins',
             key: 'userId'
         }
-    },
-    overtimeHours: {
-        type: DataTypes.INTEGER
     }
 });
 
-
 const queryInterface = database.getQueryInterface();
-
 await syncDatabase();

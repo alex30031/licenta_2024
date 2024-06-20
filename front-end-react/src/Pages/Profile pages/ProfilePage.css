@@ -196,27 +196,58 @@ button{
     display:grid;
 }
 
-.payslip-get{
-    margin: auto;
-    width: fit-content;
-    height: auto;
-    border-radius: 5px;
-    padding: 10px;
-    text-align: center;
-    margin-top: 10px;
-    background-color: white;
+.payslip-container {
+    font-family: 'Arial', sans-serif;
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.payslip-title{
-    margin: auto;
-    background-color: white;
-    width: fit-content;
-    height: auto;
-    border-radius: 5px;
-    list-style-type: none;
-    padding: 10px;
+.payslip-title {
+    font-size: 24px;
     text-align: center;
-    margin-top: 50px;
+    color: #ffffff;
+    margin-bottom: 30px;
+}
+
+.payslip-get {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.payslip-get p {
+    margin: 0;
+    padding: 8px;
+    display: table-row;
+}
+
+.payslip-get p:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.payslip-get p span {
+    display: table-cell;
+}
+
+.loading-message {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+}
+
+/* Adding labels and values styling */
+.payslip-get p span:first-child {
+    font-weight: bold;
+    text-align: left;
+    padding-right: 15px;
+}
+
+.payslip-get p span:last-child {
+    text-align: right;
 }
 
 .payslip-input{
@@ -237,7 +268,22 @@ button{
     padding: 10px;
     text-align: center;
     margin-top: 10px;
-    background-color: gray;
+    background-color: rgb(129, 128, 128);
+}
+
+.button-pdf {
+    display: block; /* Make the button a block element to allow margin auto to center it */
+    margin: auto;
+    width: fit-content;
+    height: auto;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    margin-top: 10px; /* Adjust as needed to increase/decrease space between the payslip and the button */
+    background-color: rgb(129, 128, 128);
+    cursor: pointer; /* Change the cursor to pointer to indicate it's clickable */
+    color: #fff; /* Optional: Change the text color to improve contrast */
+    border: none; /* Optional: Remove border if present */
 }
 
 .info-form{
@@ -275,7 +321,31 @@ button{
     background-color: gray;
 }
 
-.ul-info{
+.ul-info {
+    margin: auto;
+    background-color: white;
+    width: fit-content;
+    height: auto;
+    border-radius: 5px;
+    list-style-type: none;
+    padding: 20px; /* increase padding */
+    text-align: center;
+    margin-top: 50px;
+    overflow-y: scroll;
+    max-height: 600px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* add shadow */
+    font-family: Arial, sans-serif; /* change font */
+}
+
+.li-info {
+    padding: 20px; /* increase padding */
+    border-radius: 5px;
+    margin: 20px; /* increase margin */
+    background-color: #f9f9f9; /* add background color */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1); /* add shadow */
+}
+
+.loading-message{
     margin: auto;
     background-color: white;
     width: fit-content;
@@ -285,12 +355,71 @@ button{
     padding: 10px;
     text-align: center;
     margin-top: 50px;
-    overflow-y: scroll;
-    max-height: 600px;
 }
 
-.li-info{
-    padding: 10px;
+.task-form{
+    margin: auto;
+    background-color: white;
+    width: fit-content;
+    display:grid;
+    height: auto;
     border-radius: 5px;
-    margin: 10px;
+    list-style-type: none;
+    padding: 10px;
+    text-align: center;
+    margin-top: 50px;
 }
+
+.task-form li{
+    font-weight: bold;
+    border-radius: 5px;
+    margin: 3px;
+}
+
+.task-input{
+    margin: auto;
+    height: auto;
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+    margin-top: 10px;
+    background-color: white;
+}
+
+.task-submit{
+    margin: auto;
+    width: fit-content;
+    height: auto;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    margin-top: 10px;
+    background-color: gray;
+}
+
+.tasks-list-users {
+    margin: auto;
+    background-color: white;
+    width: fit-content;
+    height: auto;
+    border-radius: 5px;
+    list-style-type: none;
+    padding: 10px;
+    text-align: center;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: row; /* Add this line */
+}
+
+.title-for-tasks {
+    margin: auto;
+    background-color: white;
+    width: fit-content;
+    height: auto;
+    border-radius: 5px;
+    list-style-type: none;
+    padding: 10px;
+    text-align: center;
+    margin-top: 50px;
+}
+

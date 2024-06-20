@@ -4,6 +4,8 @@ import axios from 'axios';
 import "./Homepage.css"
 import chatIcon from "../../Components/Assets/chat_icon.png"
 import Chat from './Chat';
+import TasksList from './TasksList';
+import Calendar from './Calendar';
 
 
 const UserHomepage = ({ decodedToken, onLogout }) => {
@@ -59,15 +61,18 @@ const UserHomepage = ({ decodedToken, onLogout }) => {
       {decodedToken && <Navbar decodedToken={decodedToken} onLogout={handleLogout} />}
       {userData && <h1>Welcome to the homepage, {userData.username}!</h1>}
       {!userData && <h1>Welcome to the homepage!</h1>}
-       <button 
-      type='button' 
-      className="chat-button" 
-      onClick={() => setShowChat(!showChat)
+      <h2 className='task-message'>Tasks awaiting you:</h2>
+      {<TasksList decodedToken = {decodedToken} />}
+      {<Calendar decodedToken = {decodedToken} />}
+      <button 
+        type='button' 
+        className="chat-button" 
+        onClick={() => setShowChat(!showChat)
       }>
         <img src={chatIcon} alt="Chat" />
       </button> 
-       {<Chat ws={ws} decodedToken={decodedToken} showChat={showChat} />}
-      </div>
+      {<Chat ws={ws} decodedToken={decodedToken} showChat={showChat} />}
+    </div>
   );
 };
 

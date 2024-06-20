@@ -1,38 +1,41 @@
 import {database, syncDatabase} from './config.js';
 import { DataTypes } from 'sequelize';
 
-export const Workday = database.define('workdays', {
-    id: {
+export const Event = database.define('events', {
+    eventId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    month: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    workDays: {
+    userId: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    dailyWage: {
-        type: DataTypes.FLOAT,
+    year: {
+        type: DataTypes.INTEGER,
         allowNull: false
     },
-    userId: {
+    month: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    day: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    note: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    }
+    ,userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
             model: 'logins',
             key: 'userId'
         }
-    },
-    overtimeHours: {
-        type: DataTypes.INTEGER
     }
 });
 
-
 const queryInterface = database.getQueryInterface();
-
 await syncDatabase();

@@ -5,3 +5,4 @@ export const workdayRouter = express.Router();
 
 workdayRouter.post('/workday/:userId', workdayController.createWorkdayForUser);
 workdayRouter.get('/workday/:userId', workdayController.getWorkdayForUser);
+workdayRouter.put('/workday/:userId', workdayController.updateWorkdayForUser);
