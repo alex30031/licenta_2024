@@ -270,19 +270,18 @@ const ProductivityGraph = ({decodedToken}) => {
       const inputWidth = input.offsetWidth;
       const inputHeight = input.offsetHeight;
   
-      // Increase the scale for better resolution
+     
       html2canvas(input, { scale: 2 })
           .then((canvas) => {
-              const imgWidth = 210; // A4 width in mm
-              const imgHeight = (canvas.height * imgWidth) / canvas.width; // Calculate the height to maintain aspect ratio
+              const imgWidth = 210;
+              const imgHeight = (canvas.height * imgWidth) / canvas.width; 
               const imgData = canvas.toDataURL('image/png');
   
-              // Initialize jsPDF in portrait or landscape mode based on content size
               const pdf = new jsPDF(inputWidth > inputHeight ? 'l' : 'p', 'mm', 'a4');
               const pdfWidth = pdf.internal.pageSize.getWidth();
               const pdfHeight = pdf.internal.pageSize.getHeight();
   
-              // Calculate positions to center the image
+              
               const x = (pdfWidth - imgWidth) / 2;
               const y = (pdfHeight - imgHeight) / 2;
   

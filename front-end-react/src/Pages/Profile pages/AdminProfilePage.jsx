@@ -155,8 +155,8 @@ const Payslip = () => {
   }, []);
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
     try {
+      event.preventDefault();
       await axios.post(`${SERVER_URL}/workday/${userId}`, { month, dailyWage, overtimeHours });
       alert('Payslip created successfully');
     } catch (error) {
@@ -165,7 +165,6 @@ const Payslip = () => {
   };
 
   const handleUpdate = async (event) => {
-    event.preventDefault();
     try {
       await axios.put(`${SERVER_URL}/workday/${userId}`, { month, dailyWage, overtimeHours });
       alert('Payslip updated successfully');
@@ -175,7 +174,7 @@ const Payslip = () => {
   }
 
   return (
-      <form className='payslip-form' >
+      <form className='payslip-form' onSubmit={handleSubmit} >
           <label>
               User ID:
               <input className='payslip-input' type="text" value={userId} onChange={(e) => setUserId(e.target.value)} required />

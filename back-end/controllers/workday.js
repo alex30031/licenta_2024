@@ -4,7 +4,7 @@ const getWorkdaysInMonth = (month, year) => {
   let count = 0;
   const date = new Date(year, month, 1);
   while (date.getMonth() === month) {
-    if (date.getDay() !== 0 && date.getDay() !== 6) { // Exclude Sunday (0) and Saturday (6)
+    if (date.getDay() !== 0 && date.getDay() !== 6) {
       count++;
     }
     date.setDate(date.getDate() + 1);

@@ -239,7 +239,6 @@ button{
     color: #666;
 }
 
-/* Adding labels and values styling */
 .payslip-get p span:first-child {
     font-weight: bold;
     text-align: left;
@@ -272,18 +271,18 @@ button{
 }
 
 .button-pdf {
-    display: block; /* Make the button a block element to allow margin auto to center it */
+    display: block; 
     margin: auto;
     width: fit-content;
     height: auto;
     border-radius: 5px;
     padding: 10px;
     text-align: center;
-    margin-top: 10px; /* Adjust as needed to increase/decrease space between the payslip and the button */
+    margin-top: 10px;
     background-color: rgb(129, 128, 128);
-    cursor: pointer; /* Change the cursor to pointer to indicate it's clickable */
-    color: #fff; /* Optional: Change the text color to improve contrast */
-    border: none; /* Optional: Remove border if present */
+    cursor: pointer; 
+    color: #fff; 
+    border: none; 
 }
 
 .info-form{
@@ -328,21 +327,21 @@ button{
     height: auto;
     border-radius: 5px;
     list-style-type: none;
-    padding: 20px; /* increase padding */
+    padding: 20px; 
     text-align: center;
     margin-top: 50px;
     overflow-y: scroll;
     max-height: 600px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* add shadow */
-    font-family: Arial, sans-serif; /* change font */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
+    font-family: Arial, sans-serif; 
 }
 
 .li-info {
-    padding: 20px; /* increase padding */
+    padding: 20px; 
     border-radius: 5px;
-    margin: 20px; /* increase margin */
-    background-color: #f9f9f9; /* add background color */
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1); /* add shadow */
+    margin: 20px; 
+    background-color: #f9f9f9; 
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
 }
 
 .loading-message{
@@ -408,7 +407,11 @@ button{
     text-align: center;
     margin-top: 50px;
     display: flex;
-    flex-direction: row; /* Add this line */
+    flex-direction: column;
+    overflow-y: scroll;
+    max-height: 600px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+
 }
 
 .title-for-tasks {
